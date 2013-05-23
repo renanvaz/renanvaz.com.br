@@ -8,7 +8,7 @@ abstract class Kohana_ControllerRoot extends Controller_Template {
 		'js' 			=> array(),
 	);
 
-    public $template 			= 'shared/template/template';
+    public $template 			= 'shared/template/base';
 	public $restrict_actions 	= array();
 	public $restrict_redirect 	= 'default/index';
 
