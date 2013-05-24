@@ -120,7 +120,7 @@ abstract class Kohana_Template {
             $buffer .= strpos($file, '.less') !== false ? self::less_compiler(file_get_contents($path . $file), $path . $file) : file_get_contents($path . $file);
         }
 
-        $filename = base64_encode($filename);
+        $filename = md5($filename);
         $buffer = self::compress($buffer);
 
         return array('filename' => $filename, 'content' => $buffer);

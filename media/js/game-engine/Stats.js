@@ -11,7 +11,7 @@ var Stats = function (title) {
 
 	var container = document.createElement( 'div' );
 	container.id = 'stats';
-	try{container.addEventListener( 'mousedown', function ( event ) { event.preventDefault(); setMode( ++ mode % 2 ) }, false );}catch(e){}
+	try{container.addEventListener( 'mousedown', function ( event ) { event.preventDefault(); setMode( ++ mode % 2 ) }, false );}catch(e){};
 	container.style.cssText = 'width:80px;opacity:0.9;cursor:pointer';
 
 	var divTitle = document.createElement( 'div' );
@@ -41,7 +41,7 @@ var Stats = function (title) {
 		bar.style.cssText = 'width:1px;height:30px;float:left;background-color:#113';
 		fpsGraph.appendChild( bar );
 
-	}
+	};
 
 	var msDiv = document.createElement( 'div' );
 	msDiv.id = 'ms';
@@ -65,7 +65,7 @@ var Stats = function (title) {
 		bar.style.cssText = 'width:1px;height:30px;float:left;background-color:#131';
 		msGraph.appendChild( bar );
 
-	}
+	};
 
 	var setMode = function ( value ) {
 
@@ -81,14 +81,14 @@ var Stats = function (title) {
 				fpsDiv.style.display = 'none';
 				msDiv.style.display = 'block';
 				break;
-		}
+		};
 
-	}
+	};
 
 	var updateGraph = function ( dom, value ) {
 		var child = dom.appendChild( dom.firstChild );
 		child.style.height = value + 'px';
-	}
+	};
 
 	return {
 
@@ -127,7 +127,7 @@ var Stats = function (title) {
 				prevTime = time;
 				frames = 0;
 
-			}
+			};
 
 			return time;
 
@@ -137,8 +137,8 @@ var Stats = function (title) {
 
 			startTime = this.end();
 
-		}
+		};
 
-	}
+	};
 
 };

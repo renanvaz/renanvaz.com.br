@@ -26,9 +26,13 @@ function multiplyColor(&$im, $color = array(255, 0, 0))
 }
 
 header('Content-Type: image/png');
+$cache_expire = 60*60*24*365;
+header("Pragma: public");
+header("Cache-Control: max-age=".$cache_expire);
+header('Expires: ' . gmdate('D, d M Y H:i:s', time()+$cache_expire) . ' GMT');
 
 if(isset($_GET['explode'])){
-   $im = imagecreatefrompng('img/EteExplode.png');
+   $im = imagecreatefrompng('media/img/EteExplode.png');
    $width = imagesx($im);
    $height = imagesy($im);
    $imn = imagecreatetruecolor($width, $height);
@@ -45,8 +49,8 @@ if(isset($_GET['explode'])){
    imagepng($imn);
    imagedestroy($imn);
 }else{
-   $im = imagecreatefrompng('img/EteLayer1.png');
-   $layer = imagecreatefrompng('img/EteLayer2.png');
+   $im = imagecreatefrompng('media/img/EteLayer1.png');
+   $layer = imagecreatefrompng('media/img/EteLayer2.png');
 
    $width = imagesx($im);
    $height = imagesy($im);

@@ -56,7 +56,7 @@ var GAME = {
 
         if(this.Settings.FPS_SEARCH !== false){
             setInterval(this._SearchSprites, 1000/this.Settings.FPS_SEARCH);
-        }
+        };
 
         this._SearchSprites();
 
@@ -83,7 +83,7 @@ var GAME = {
             	_has = rg.test(keyCode.toString());
             	has = has ? has : _has;
                 GAME.Key[i] = _has ? true : GAME.Key[i];
-            }
+            };
 
 			if(has) e.preventDefault();
         })
@@ -97,7 +97,7 @@ var GAME = {
             	_has = rg.test(keyCode.toString());
             	has = has ? has : _has;
                 GAME.Key[i] = _has ? false : GAME.Key[i];
-            }
+            };
 
 			if(has) e.preventDefault();
         });
@@ -107,7 +107,7 @@ var GAME = {
     		var div = $('<div data-sprite="static" style="top: -1000px; left: -1000px;"></div>')[0];
     		var s = new Sprite(div);
     		this.Entity[i](s);
-    	}
+    	};
     },
     _SearchSprites: function(){
 		if(!GAME.Paused){
@@ -119,22 +119,22 @@ var GAME = {
 				$('[data-sprite][data-entity]:not([data-entity-instance])').each(function(){
 					$(this).sprite().instance = new GAME.Entity[$(this).attr('data-entity-instance', 'true').attr('data-entity')]($(this).sprite());
 				});
-			}
+			};
 			GAME.Sprites.Animated = [];
 			$('[data-sprite="static"], [data-sprite="sensor"]').each(function(){
 				var sprite = $(this).sprite();
 				var size = {
 					width: $(sprite.el).width(),
 					height: $(sprite.el).height()
-				}
+				};
 
 				var position = new Vector2($(sprite.el).css('left').toNumber() + size.width/2, $(sprite.el).css('top').toNumber() + size.height/2);
 
 				if(sprite.cache.position.x != position.x || sprite.cache.position.y != position.y || sprite.cache.height != size.height || sprite.cache.width != size.width){
 					GAME.Sprites.Animated.push(sprite);
-				}
+				};
 			});
-		}
+		};
     },
 	_AddSprite: function(sprite){
 		GAME.Sprites.All.push(sprite);
@@ -156,7 +156,7 @@ var GAME = {
 		if(!GAME.Paused){
             if(GAME._Paused == true){
                 GAME.Time.LAST_TIME = new Date().getTime();
-            }
+            };
 
             var i, sprite;
             var time = new Date().getTime();
@@ -171,8 +171,8 @@ var GAME = {
                 sprite = GAME.Sprites.Type.static[i];
     			sprite.getHTMLdata();
                 sprite.apply();
-            }
-            //}
+            };
+            //};
 
             for(i = 0; i < GAME.Sprites.Type.sensor.length; i++){
                 sprite = GAME.Sprites.Type.sensor[i];
@@ -204,7 +204,7 @@ var GAME = {
 			};
 
             GAME.OnStep(GAME.Time.ELAPSED_TIME);
-		}
+		};
         GAME._Paused = GAME.Paused;
     },
 	OnStep: function(){},  //Verificar se vale a pena tornar isto um evento
@@ -220,10 +220,10 @@ var GAME = {
 			document.body.appendChild( this.statsProcess.domElement );
 		}catch(e){
 			throw 'ShowStatus needs of Stats.js embeded';
-		}
-	}
+		};
+	};
 
-}
+};
 
 var rAF = (function() {
 	var window = {};
@@ -233,7 +233,7 @@ var rAF = (function() {
         window.request = window[vendors[x]+'RequestAnimationFrame'];
         window.cancel = window[vendors[x]+'CancelAnimationFrame']
                                    || window[vendors[x]+'CancelRequestAnimationFrame'];
-    }
+    };
 
     if (!window.request)
         window.request = function(callback, element) {
@@ -260,7 +260,7 @@ var _RequestAnimFrame = function(){
 
 	this.add = function(fn){
 		this.data.push(fn);
-	}
+	};
 
 	this.time = function(time){
 		for(var i = 0; i < self.data.length; i++){
@@ -268,13 +268,13 @@ var _RequestAnimFrame = function(){
 				fn();
 				rAF.request(self.time);
 			}, 5, self.data[i]);
-		}
-	}
+		};
+	};
 
 	this.start = function(){
 		rAF.request(this.time);
-	}
-}
+	};
+};
 
 var RequestAnimFrame = new _RequestAnimFrame();
 
@@ -290,28 +290,30 @@ var RequestAnimFrame = new _RequestAnimFrame();
         if (vis.hasOwnProperty(hidden) && hidden in document) {
             change = vis[hidden];
             break;
-        }
-    }
-    if (change)
+        };
+    };
+    if (change){
         document.addEventListener(change, onchange);
-    else if (/*@cc_on!@*/false) // IE 9 and lower
+    } else if (/*@cc_on!@*/false){ // IE 9 and lower
         document.onfocusin = document.onfocusout = onchange
-    else
+    } else {
         window.onfocus = window.onblur = onchange;
+    }
 
     function onchange (evt) {
         var body = document.body;
         evt = evt || window.event;
 
-        if (evt.type == "focus" || evt.type == "focusin")
+        if (evt.type == "focus" || evt.type == "focusin"){
         	GAME.Paused = false;
-        else if (evt.type == "blur" || evt.type == "focusout")
+        } else if (evt.type == "blur" || evt.type == "focusout"){
             GAME.Paused = true;
-        else
+        } else {
             if(this[hidden]){
         		GAME.Paused = true;
             }else{
         		GAME.Paused = false;
-        	}
-    }
+        	};
+        };
+    };
 })();

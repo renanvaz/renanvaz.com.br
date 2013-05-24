@@ -73,7 +73,7 @@ Vector2.prototype.normalize = function () {
     if (d > 0) {
         this.x = this.x / d;
         this.y = this.y / d;
-    }
+    };
     return this;
 };
 

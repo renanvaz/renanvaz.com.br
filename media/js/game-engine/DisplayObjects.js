@@ -5,7 +5,7 @@ var DisplayObject = function(){
 	this.parent 	= null;
 	this.event 		= null;
 	this.childs 	= [];
-}
+};
 
 DisplayObject.prototype.bind = function(name, fn){
 	if(!this.event)	this.event = new EventHandler(this);
@@ -22,7 +22,7 @@ DisplayObject.prototype.trigger = function(name, params, retroative){
 
 	if(retroative && this.parent){
 		this.parent.trigger(name, params);
-	}
+	};
 };
 DisplayObject.prototype.addChild = function(child){
 	child.parent = this;
@@ -43,8 +43,8 @@ var Shape = {
 		TOP_RIGHT		: 2,
 		BOTTOM_LEFT		: 3,
 		BOTTOM_RIGHT	: 4,
-	}
-}
+	};
+};
 
 Shape.box.prototype 		= Object.extend(Shape.box.prototype , DisplayObject.prototype);
 Shape.circle.prototype 		= Object.extend(Shape.circle.prototype , DisplayObject.prototype);
@@ -57,14 +57,14 @@ var HACK = function (obj){
 	obj.__defineGetter__('r', function () { return this.parent.width/2; });
 	obj.__defineGetter__('w', function () { return this.parent.width; });
 	obj.__defineGetter__('h', function () { return this.parent.height; });
-}
+};
 
 var HACK2 = function (obj){
 	obj.__defineGetter__('pos', function () { return this.parent.getPositionForCollision().clone().sub(new Vector2(this.parent.width/2, this.parent.height/2)); });
 	obj.__defineGetter__('r', function () { return this.parent.width/2; });
 	obj.__defineGetter__('w', function () { return this.parent.width; });
 	obj.__defineGetter__('h', function () { return this.parent.height; });
-}
+};
 
 HACK(Shape.circle.prototype);
 HACK2(Shape.box.prototype);
@@ -96,7 +96,7 @@ var DebugDraw = function(){
 				ctx.moveTo(shape.points[0].x, shape.points[0].y);
 				for(var i = 1; i < shape.points.length; i++){
 					ctx.lineTo(shape.points[i].x, shape.points[i].y);
-				}
+				};
 				ctx.closePath();
 			}else if(shape instanceof Triangle){
 				ctx.beginPath();
@@ -104,9 +104,9 @@ var DebugDraw = function(){
 				ctx.lineTo(shape.points[1].x, shape.points[1].y);
 				ctx.lineTo(shape.points[2].x, shape.points[2].y);
 				ctx.closePath();
-			}
+			};
 			ctx.fill();
-		}
+		};
 	});
 };
 DebugDraw.prototype = new DisplayObject();
@@ -133,7 +133,7 @@ var Sprite = function(el){
 		resistance		: GAME.Physics.resistance.clone(),
 		plataform		: false, //Enabled only collisions at the top
 		collisionEnabled: true
-	}
+	};
 
     this.cache 			= {}; //Cache of last states
     this.tiles 			= [];
@@ -148,7 +148,7 @@ var Sprite = function(el){
 	this.bind('onAdd', function(child){
 		if(child instanceof Sprite){
 			this.getLastParent()._body.push(child);
-		}
+		};
 	});
 
 	$(this.el).data('game', this).attr('data-sprite-initialized', 'true');
@@ -156,7 +156,7 @@ var Sprite = function(el){
 
 	if($(this.el).parent().is('[data-sprite]')){
 		$(this.el).parent().sprite().addChild(this);
-	}
+	};
 
 	this.getHTMLdata();
     this.saveCurrentData();
@@ -167,23 +167,23 @@ var Sprite = function(el){
 	if(GAME.Settings.DEBUG_DRAW){
 		this.debugDraw = new DebugDraw();
 		this.addChild(this.debugDraw);
-	}
+	};
 
 	$(this.el).bind('fn.remove', function(e){
 		var s = $(e.target).sprite();
 		if(s) GAME._RemoveSprite(s);
 	});
-}
+};
 
 Sprite.prototype = new DisplayObject();
 
 Sprite.prototype.attr = function(name, d){
 	return $(this.el).getAttr(name, d);
-}
+};
 
 Sprite.prototype.css = function(name, d){
 	return ($(this.el).css(name) || d).toString().toNumber();
-}
+};
 
 Sprite.prototype.getPositionForCollision = function(){
 	var pos = new Vector2(this.position.x, this.position.y);
@@ -191,28 +191,28 @@ Sprite.prototype.getPositionForCollision = function(){
 	if(s = this.parent){
 		pos.x += s.getPositionForCollision().x - s.width / 2;
 		pos.y += s.getPositionForCollision().y - s.height / 2;
-	}
+	};
 	return pos;
-}
+};
 
 Sprite.prototype.getLastParent = function(){
 	var p = this;
 	var s;
 	if(s = this.parent){
 		p = s.getLastParent();
-	}
+	};
 	return p;
-}
+};
 
 Sprite.prototype.getTiles = function(){
 	var t = this.tiles;
 	for(var i = 0; i < this._body.length; i++){
 		for(var j = 0; j < this._body[i].tiles.length; j++){
 			t.push(this._body[i].tiles[j]);
-		}
-	}
+		};
+	};
 	return t;
-}
+};
 
 Sprite.prototype.saveCurrentData = function(){
     this.cache.html 		= this.getHtml();
@@ -223,16 +223,16 @@ Sprite.prototype.saveCurrentData = function(){
     this.cache.collisions 	= new CollisionData(this.collisions.data);
 
     GAME.TiledIndex.add(this);
-}
+};
 
 Sprite.prototype.getHtml = function(){
 	var html = '';
 	for (var attr, i = 0, attrs = this.el.attributes, l = attrs.length; i < l; i++){
-	    attr = attrs.item(i)
+	    attr = attrs.item(i);
 	    html += attr.nodeName + attr.nodeValue;
-	}
+	};
 	return html;
-}
+};
 
 Sprite.prototype.getHTMLdata = function(){
 	if(this.cache.html != undefined && this.getHtml() == this.cache.html) return false;
@@ -252,18 +252,18 @@ Sprite.prototype.getHTMLdata = function(){
 		resistance 	: new Vector2(this.attr('data-resistance-x', this.config.resistance.x), this.attr('data-resistance-y', this.config.resistance.y)),
 		plataform	: this.attr('data-plataform', this.config.plataform).toString() == 'true',
 		collisionEnabled: this.attr('data-collision-enabled', this.config.collisionEnabled).toString() == 'true'
-	}
+	};
 
     if(GAME.Settings.DEBUG_DRAW && this.debugDraw){
 		this.addChild(this.shape);
 		this.addChild(this.debugDraw);
-	}
+	};
 
     if(this.type == 'static' && this.cache.position){
         //Calculate velocity of element out game - DESLOCAMENTO
         this.velocity = new Vector2(this.position.x - this.cache.position.x, this.position.y - this.cache.position.y);
-    }
-}
+    };
+};
 
 Sprite.prototype.addVelocity = function (x, y) {
 	this.velocity.add(new Vector2(x, y));
@@ -278,8 +278,8 @@ Sprite.prototype.collide = function(other){
 
 	for(var i = 0; i < this._body.length; i++){
 		this._body[i]._collide(other);
-	}
-}
+	};
+};
 
 Sprite.prototype._collide = function(other){
 	var collided = false;
@@ -291,16 +291,13 @@ Sprite.prototype._collide = function(other){
 	shape_other = shape_other instanceof Box || shape_other instanceof Triangle ? shape_other.toPolygon() : shape_other;
 	if(shape_self instanceof Polygon && shape_other instanceof Polygon){
 		collided = testPolygonPolygon(shape_self, shape_other, response);
-	}
-	else if(shape_self instanceof Circle && shape_other instanceof Circle){
+	} else if(shape_self instanceof Circle && shape_other instanceof Circle){
 		collided = testCircleCircle(shape_self, shape_other, response);
-	}
-	else if(shape_self instanceof Circle && shape_other instanceof Polygon){
+	} else if(shape_self instanceof Circle && shape_other instanceof Polygon){
 		collided = testCirclePolygon(shape_self, shape_other, response);
-	}
-	else if(shape_self instanceof Polygon && shape_other instanceof Circle){
+	} else if(shape_self instanceof Polygon && shape_other instanceof Circle){
 		collided = testPolygonCircle(shape_self, shape_other, response);
-	}
+	};
 
 	//console.log(collided, response, this.position.toString(), other.position.toString());
 
@@ -310,14 +307,14 @@ Sprite.prototype._collide = function(other){
 			bottom: response.overlapV.y < 0,
 			right: response.overlapV.x > 0,
 			left: response.overlapV.x < 0
-		}
+		};
 
 		this._hit = {
 			top: response.overlapV.y < 0,
 			bottom: response.overlapV.y > 0,
 			right: response.overlapV.x < 0,
 			left: response.overlapV.x > 0
-		}
+		};
 
 		var collision = new Collision(this, other);
 
@@ -333,17 +330,17 @@ Sprite.prototype._collide = function(other){
 
 						if(response.overlapV.y != 0 && (collision.self.hit.top || (collision.self.hit.bottom && this.cache.position.y <= this.position.y)))
 							this.getLastParent().velocity.y = 0;
-					}
+					};
 					this.collisions.addCollision(collision);
-				}
-			}
+				};
+			};
 		}else{
 			this.collisions.addCollision(collision);
-		}
+		};
 	}else{
 		this.collisions.removeCollision(this.collisions.getCollision(other));
-	}
-}
+	};
+};
 
 
 Sprite.prototype.addVelocityOfObjectsInCollision = function(){
@@ -361,17 +358,17 @@ Sprite.prototype.addVelocityOfObjectsInCollision = function(){
 	                collision.self.sprite.position.y += collision.other.sprite.velocity.y;
 	            }else if(collision.self.hit.left || collision.self.hit.right){
 	                collision.self.sprite.position.x += collision.other.sprite.velocity.x;
-	            }
-	        }
-	    }
+	            };
+	        };
+	    };
     });
-}
+};
 
 Sprite.prototype.process = function(){
 	if(!this.el){
 		Game._RemoveSprite(this);
 		return false;
-	}
+	};
 
 	if(this.type != 'dynamic') return false;
 
@@ -402,42 +399,42 @@ Sprite.prototype.process = function(){
 	    	collision = this.collisions.data[i];
 	    	if(collision.other.sprite.el){
 	        	sprite.collide(collision.other.sprite);
-	    	}
+	    	};
 	    };
 
 	    for(i = 0; i < others.length; i++){
 	    	other = others[i];
 	    	if(other.el){
 	        	sprite.collide(other);
-	        }
+	        };
 	    };
-	}
+	};
 
     if(this.onStep) this.onStep(GAME.Time.ELAPSED_TIME);
-}
+};
 
 Sprite.prototype.calcResistance = function(ve2){
     if(ve2.y > 0){
         ve2.y -= this.config.resistance.y * GAME.Time.ELAPSED_PERCENT;
         if(ve2.y < 0) ve2.y = 0;
-    }
+    };
 
     if(ve2.y < 0){
         ve2.y += this.config.resistance.y * GAME.Time.ELAPSED_PERCENT;
         if(ve2.y > 0) ve2.y = 0;
-    }
+    };
 
     if(ve2.x > 0){
         ve2.x -= this.config.resistance.x * GAME.Time.ELAPSED_PERCENT;
         if(ve2.x < 0) ve2.x = 0;
-    }
+    };
 
     if(ve2.x < 0){
         ve2.x += this.config.resistance.x * GAME.Time.ELAPSED_PERCENT;
         if(ve2.x > 0) ve2.x = 0;
-    }
+    };
     return ve2;
-}
+};
 
 Sprite.prototype.apply = function(){
 	if(this.position.x != this.cache.position.x
@@ -458,10 +455,10 @@ Sprite.prototype.apply = function(){
 			if(GAME.Settings.DEBUG_DRAW){
 				this.debugDraw = new DebugDraw();
 				this.addChild(this.debugDraw);
-			}
-		}
-	}
-}
+			};
+		};
+	};
+};
 
 /*
  * SpriteSheet animation image class
@@ -484,7 +481,7 @@ var SpriteSheet = function(){
 		FPS: 0,
 		onPlay: function(){},
 		onStop: function(){},
-		onComplete: function(){}
+		onComplete: function(){};
 	};
 
 	this.bind('onAdded', function(){
@@ -495,23 +492,23 @@ var SpriteSheet = function(){
 	this.add = function(name, config){
 		this.data[name] = config instanceof SpriteSheetData ? config : new SpriteSheetData(config);
 		this.addChild(this.data[name]);
-	}
+	};
 
 	this.remove = function(name, config){
 		delete this.data[name];
-	}
+	};
 
 	this.get = function(name){
 		return this.data[name];
-	}
+	};
 
 	this.stop = function(){
 		if(this.current != ''){
 			this.get(this.current).config.onStop.apply(this.get(this.current));
-		}
+		};
 		this.current = '';
 		clearInterval(this.timer);
-	}
+	};
 
 	this.play = function(name){
 		if(this.current != name && this.data[name]){
@@ -521,17 +518,17 @@ var SpriteSheet = function(){
 			this.div.css({backgroundImage: 'url('+this.data[name].config.image+')'});
 			this._draw();
 			this.timer = setInterval(this._draw, 1000/this.data[name].config.FPS);
-		}
-	}
+		};
+	};
 
 	this.setDefaults = function(d){
 		this.defaults = $.extend({}, this.defaults, d);
-	}
+	};
 
 	this._draw = function(){
 		self.data[self.current].draw();
-	}
-}
+	};
+};
 SpriteSheet.prototype = new DisplayObject();
 
 /*
@@ -553,13 +550,13 @@ var SpriteSheetData = function(config){
 			if(this.config.fromTo[1] < this.config.fromTo[0]){
 				for(var i = this.config.fromTo[0]; i >= this.config.fromTo[1]; i--){
 					this.config.order.push(i);
-				}
+				};
 			}else{
 				for(var i = this.config.fromTo[0]; i <= this.config.fromTo[1]; i++){
 					this.config.order.push(i);
-				}
-			}
-		}
+				};
+			};
+		};
 
 		this.frame = 0;
 
@@ -571,7 +568,7 @@ var SpriteSheetData = function(config){
 			self.draw();
 
 			GAME.Preloader.add(this.src);
-		}
+		};
 		img.src = this.config.image;
 
 		//self.config.onPlay.apply(this);
@@ -584,7 +581,7 @@ var SpriteSheetData = function(config){
 		}else{
 			if(this.frame < 0) this.frame = this.config.order.length - 1;
 			if(this.frame >= this.config.order.length) this.frame = 0;
-		}
+		};
 
 		var x = this.config.order[this.frame] % this.imageData.maxSpriteX;
 		var y = Math.floor(this.config.order[this.frame] / this.imageData.maxSpriteX);
@@ -597,8 +594,8 @@ var SpriteSheetData = function(config){
 		});
 
 		this.frame++;
-	}
-}
+	};
+};
 SpriteSheetData.prototype = new DisplayObject();
 
 
@@ -621,14 +618,14 @@ var Camera = function(el){
 
         if(GAME.Stage.size.width < this.size.width){
             throw "The Stage width can't be less than Camera width";
-        }
+        };
 
         if(GAME.Stage.size.height < this.size.height){
             throw "The stage height can't be less than Camera height";
-        }
+        };
 
         this.apply();
-    }
+    };
 
     this.apply = function(){
         $(this.el).css({
@@ -638,11 +635,11 @@ var Camera = function(el){
 
         GAME.Stage.position = new Vector2(-this.position.x, -this.position.y);
 		GAME.Stage.apply();
-    }
+    };
 
     this.look = function(sprite){
         this.target = sprite;
-    }
+    };
 
     this.follow = function(){
 		if(this.target){
@@ -654,9 +651,9 @@ var Camera = function(el){
 			if(self.position.y > GAME.Stage.size.height - self.size.height) self.position.y = GAME.Stage.size.height - self.size.height;
 
 			self.apply();
-		}
-    }
-}
+		};
+    };
+};
 Camera.prototype = new DisplayObject();
 
 
@@ -678,7 +675,7 @@ var Stage = function(el){
         this.size.height = h;
 
         this.apply();
-    }
+    };
 
     this.apply = function(){
         $(this.el).css({
@@ -690,23 +687,23 @@ var Stage = function(el){
 
 		for(var i in this.parallax){
 			this.parallax[i].draw();
-		}
-    }
+		};
+    };
 
 	this.addParallax = function(name, config){
 		var p = config instanceof StageParallax ? config : new StageParallax(config);
 		this.addChild(p);
 		this.parallax[name] = p;
-	}
+	};
 
 	this.removeParallax = function(name, config){
 		delete this.parallax[name];
-	}
+	};
 
 	this.getParallax = function(name){
 		return this.parallax[name];
-	}
-}
+	};
+};
 Stage.prototype = new DisplayObject();
 
 
@@ -718,7 +715,7 @@ var StageParallax = function(config){
 		doom: '',
 		parallaxX: .3,
 		parallaxY: 0
-	}
+	};
 
 	this.bind('onAdded', function(){
 		this.config = $.extend({}, this.defaults, this.config);
@@ -728,7 +725,7 @@ var StageParallax = function(config){
 			this.div = $('<div game-stage-parallax="true">').css({position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, zIndex: -1, background: 'url('+this.config.image+') 0 0'});
 		}else if(this.config.dom != ''){
 			this.div = $('<div game-stage-parallax="true">').css({position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}).append(this.config.dom.css('position', 'relative'));
-		}
+		};
 		$(this.parent.el).append(this.div);
 	});
 
@@ -742,7 +739,7 @@ var StageParallax = function(config){
 				left: Math.round(this.config.parallaxX * this.parent.position.x),
 				top: Math.round(this.config.parallaxY * this.parent.position.y)
 			});
-		}
-	}
-}
+		};
+	};
+};
 StageParallax.prototype = new DisplayObject();

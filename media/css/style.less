@@ -1,11 +1,55 @@
+.flex-box (@n){
+    -webkit-flex-box: @n;
+    -moz-flex-box: @n;
+    -o-flex-box: @n;
+    flex-box: @n;
+}
+
+.flex-box-display (){
+    display: -webkit-box;
+    display: -moz-box;
+    display: -o-box;
+    display: box;
+}
+
+
 body {
     padding-top: 60px;
     padding-bottom: 40px;
     background: #cdeaf9;
     overflow: hidden;
+    margin: 0;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333;
+
+    h1, h2, h3, h4, h5, h6 {
+        margin: 10px 0;
+        font-family: inherit;
+        font-weight: bold;
+        line-height: 1;
+        color: inherit;
+        text-rendering: optimizelegibility;
+    }
+
+    li {
+        line-height: 20px;
+    }
+
+    p {
+        margin: 0 0 10px;
+    }
+
+    main, article, aside {
+        display: block;
+        position: relative;
+    }
 
     main {
-        width: 960px;
+        max-width: 960px;
+        width: 100%;
+        margin: 0 auto;
 
         a {
             color: #08c;
@@ -17,8 +61,9 @@ body {
             }
         }
 
-        .nav {
-            width: 300px;
+        aside {
+            width: 30%;
+            float: left;
 
             img {
                 width: 180px;
@@ -30,41 +75,65 @@ body {
                 background: #FFF;
             }
 
-            > li {
-                list-style: disc inside none;
-
-                a {
-                    display: inline-block;
+            nav {
+                h1 {
+                    font-size: 18px;
+                    line-height: 20px;
                 }
-            }
 
-            address {
-                margin-top: 10px;
-                color: #666;
-                margin-left: -5px;
+                > li {
+                    list-style: disc inside none;
 
-                i {
-                    display: inline-block;
-                    width: 14px;
-                    height: 14px;
-                    margin-top: 1px;
-                    line-height: 14px;
-                    vertical-align: text-top;
-                    background-image: url("../img/glyphicons-halflings.png");
-                    background-position: -24px -72px;
-                    background-repeat: no-repeat;
+                    a {
+                        display: inline-block;
+                    }
+                }
+
+                address {
+                    margin-top: 10px;
+                    color: #888;
+                    margin-left: -5px;
+
+                    display: block;
+                    margin-bottom: 20px;
+                    font-style: normal;
+                    line-height: 20px;
+
+                    i {
+                        display: inline-block;
+                        width: 14px;
+                        height: 14px;
+                        margin-top: 1px;
+                        line-height: 14px;
+                        vertical-align: text-top;
+                        background-image: url("../img/glyphicons-halflings.png");
+                        background-position: -24px -72px;
+                        background-repeat: no-repeat;
+                    }
                 }
             }
         }
 
         article {
-            width: 640px;
-            margin-left: 20px;
+            width: 70%;
+            float: left;
+
+            h1 {
+                font-size: 36px;
+                line-height: 40px;
+                margin-bottom: 0;
+            }
+
+            h2 {
+                font-size: 13px;
+                line-height: 14px;
+                color: #888;
+                font-weight: normal;
+                margin-top: 0;
+            }
 
             img {
-                position: absolute;
-                top: 400px;
-                right: 0px;
+                margin-top: 88px;
             }
         }
     }
@@ -77,6 +146,27 @@ body {
         position: absolute;
         z-index: 0;
     }
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    clear: both;
+    visibility: hidden;
+    line-height: 0;
+    height: 0;
+}
+
+.clearfix {
+    display: inline-block;
+}
+
+html[xmlns] .clearfix {
+    display: block;
+}
+
+* html .clearfix {
+    height: 1%;
 }
 
 [data-stage], [data-camera]{
@@ -107,4 +197,39 @@ body {
     width: 28px;
     height: 4px;
     background: #FF9900;
+}
+
+
+@media (max-width: 767px) {
+    body {
+        overflow: visible;
+        .clearfix;
+
+        main {
+            box-sizing: border-box;
+            padding: 0 30px;
+
+            aside {
+                width: 100%;
+
+                img {
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+            }
+
+            article {
+                margin: 0;
+                width: 100%;
+
+                img {
+                    display: none;
+                }
+            }
+        }
+
+        .icon-cloud, [data-camera] {
+            display: none;
+        }
+    }
 }

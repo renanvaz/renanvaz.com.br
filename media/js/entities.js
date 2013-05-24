@@ -4,7 +4,8 @@ var EteImage = (function(){
 	function EteImage(){
 		var self = this;
 		this.data = {index: [], cache: {}};
-	}
+	};
+
 	EteImage.prototype = new DisplayObject();
 
 	EteImage.prototype.cache = function(colors){
@@ -14,33 +15,33 @@ var EteImage = (function(){
 			var img = {
 				ete: new Image,
 				explode: new Image
-			}
+			};
 
 			var nocache = +new Date;
 
 			img.ete.onload = function(){
 				if(++count == colors.length*2){
 					self.trigger('cached');
-				}
-			}
+				};
+			};
 
 			img.explode.onload = function(){
 				if(++count == colors.length*2){
 					self.trigger('cached');
-				}
-			}
+				};
+			};
 
 			img.ete.src = 'get_image.php?color='+encodeURIComponent(colors[i])+'&'+nocache;
 			img.explode.src = 'get_image.php?explode=&color='+encodeURIComponent(colors[i])+'&'+nocache;
 
 			self.data.index.push(colors[i]);
 			self.data.cache[colors[i]] = img;
-		}
-	}
+		};
+	};
 
 	EteImage.prototype.getRandomCached = function(){
 		return this.data.cache[this.data.index[Math.round(Math.random() * (this.data.index.length -1))]];
-	}
+	};
 
 	return EteImage;
 })();
@@ -52,7 +53,7 @@ var explodeColor;
 var Gun = function (){
 	this.dagmage = 5;
 	this.can = true;
-}
+};
 
 Gun.prototype = new DisplayObject();
 
@@ -69,7 +70,7 @@ Gun.prototype.attack = function(){
 		}else{
 			html = '<div data-sprite="dynamic" data-entity="shot'+(parent.spriteSheet.current.toLowerCase().indexOf('left') != -1 ? 'Left' : 'Right')+'"/>';
 			left = (parent.spriteSheet.current.toLowerCase().indexOf('left') != -1 ? parent.position.x - parent.width/2 - size - padding : parent.position.x + parent.width/2 + padding);
-		}
+		};
 
 	    var el = $(html).css({
 	        left: left,
@@ -86,8 +87,8 @@ Gun.prototype.attack = function(){
 	    	Player.spriteSheet.play('idle'+(parent.spriteSheet.current.toLowerCase().indexOf('left') != -1 ? 'Left' : 'Right'));
 	    }, 300);
 
-	}
-}
+	};
+};
 
 var shotBase = function(sprite){
 	this.sprite = sprite;
@@ -104,7 +105,7 @@ var shotBase = function(sprite){
 		if(collision.other.sprite != Player && !collision.other.sprite.config.plataform && collision.other.sprite.type != 'sensor'){
 			$(collision.self.sprite.el).remove();
 			GAME._RemoveSprite(collision.self.sprite);
-		}
+		};
 
 		var dataObject = collision.other.sprite.attr('data-entity');
 		if(dataObject && dataObject == 'EteEnemy'){
@@ -123,11 +124,11 @@ var shotBase = function(sprite){
 			setTimeout(function(){
 				randomEnemy();
 			}, 8000);
-		}
+		};
 	});
-}
+};
 
-GAME.OnStep = function(){}
+GAME.OnStep = function(){};
 
 GAME.Entity.GamePlayer = function(sprite){
 	Player = sprite;
@@ -159,7 +160,7 @@ GAME.Entity.GamePlayer = function(sprite){
 		sprite.position.y = 1500 - 300;
 		sprite.position.x = 50;
 		sprite.setVelocity(600, -600);
-	}
+	};
 
 	setTimeout(function(){
 		position();
@@ -169,7 +170,7 @@ GAME.Entity.GamePlayer = function(sprite){
 	this.sprite.onStep = function(){
 		if(sprite.spriteSheet.current == 'shotLeft' || sprite.spriteSheet.current == 'shotRight'){
 			return false;
-		}
+		};
 
 		if(sprite.spriteSheet.current == 'dead') return false;
 
@@ -177,25 +178,25 @@ GAME.Entity.GamePlayer = function(sprite){
 	        sprite.velocity.x = -300;
 	    }else if(GAME.Key.RIGHT && !crouch && !lookUp){
 	       sprite.velocity.x = 300;
-	    }
+	    };
 
 	    if((GAME.Key.SPACE || GAME.Key.UP) && !jump){
 	        sprite.velocity.y -= 830;
 	        jump = true;
-	    }
+	    };
 
 		if(sprite.velocity.y < 0){
 			if(sprite.cache.position.x < sprite.position.x || (sprite.cache.position.x == sprite.position.x && sprite.spriteSheet.current.toLowerCase().indexOf('right') != -1)){
 				sprite.spriteSheet.play('jumpRight');
 			}else{
 				sprite.spriteSheet.play('jumpLeft');
-			}
+			};
 		}else if(sprite.velocity.y > 0){
 			if(sprite.cache.position.x < sprite.position.x || (sprite.cache.position.x == sprite.position.x && sprite.spriteSheet.current.toLowerCase().indexOf('right') != -1)){
 				sprite.spriteSheet.play('fallRight');
 			}else{
 				sprite.spriteSheet.play('fallLeft');
-			}
+			};
 		}else{
 			if(!crouch && !lookUp){
 				if (sprite.velocity.x != 0) {
@@ -204,46 +205,46 @@ GAME.Entity.GamePlayer = function(sprite){
 
 						if(sprite.velocity.x > 0 && GAME.Key.LEFT){
 							sprite.spriteSheet.play('breakRight');
-						}
+						};
 					} else {
 						sprite.spriteSheet.play('left');
 
 						if(sprite.velocity.x < 0 && GAME.Key.RIGHT){
 							sprite.spriteSheet.play('breakLeft');
-						}
-					}
+						};
+					};
 				} else {
 					if(sprite.spriteSheet.current != 'idleLeft' && sprite.spriteSheet.current != 'idleRight'){
 						if(sprite.cache.position.x > sprite.position.x || sprite.spriteSheet.current.toLowerCase().indexOf('right') == -1){
 							sprite.spriteSheet.play('idleLeft');
 						}else{
 							sprite.spriteSheet.play('idleRight');
-						}
-					}
-				}
-			}
-		}
-	}
-}
+						};
+					};
+				};
+			};
+		};
+	};
+};
 
 GAME.Entity.shotLeft = function(sprite){
 	var shot = new shotBase(sprite);
 	shot.sprite.config.acceleration = new Vector2(0, -GAME.Physics.acceleration.y);
 	shot.sprite.velocity = new Vector2(-shot.velocity, 0);
-}
+};
 
 GAME.Entity.shotRight = function(sprite){
 	var shot = new shotBase(sprite);
 	shot.sprite.config.acceleration = new Vector2(0, -GAME.Physics.acceleration.y);
 	shot.sprite.velocity = new Vector2(shot.velocity, 0);
-}
+};
 
 GAME.Entity.EteExplode = function(sprite){
 	this.sprite = sprite;
 
 	this.sprite.spriteSheet.add('normal', new SpriteSheetData({fromTo: [0, 9], image: explodeColor, width: 233, height: 192, FPS: 30, repeat: false, onComplete: function(){ $(this.parent.parent.el).remove(); }}));
 	this.sprite.spriteSheet.play('normal');
-}
+};
 
 GAME.Entity.EteEnemy = function(sprite){
 	var self = this;
@@ -276,8 +277,8 @@ GAME.Entity.EteEnemy = function(sprite){
 				collision.self.sprite.velocity.x = -velX;
 			}else if(collision.self.hit.right){
 				collision.self.sprite.velocity.x = velX;
-			}
-		}
+			};
+		};
 	});
 
 	var sprite = this.sprite;
@@ -287,13 +288,13 @@ GAME.Entity.EteEnemy = function(sprite){
 				sprite.spriteSheet.play('jumpRight');
 			}else{
 				sprite.spriteSheet.play('jumpLeft');
-			}
+			};
 		}else if(sprite.velocity.y > 0){
 			if(sprite.cache.position.x < sprite.position.x || (sprite.cache.position.x == sprite.position.x && sprite.spriteSheet.current.toLowerCase().indexOf('right') != -1)){
 				sprite.spriteSheet.play('fallRight');
 			}else{
 				sprite.spriteSheet.play('fallLeft');
-			}
+			};
 		}else{
 			if(!crouch && !lookUp){
 				if (sprite.velocity.x != 0) {
@@ -301,17 +302,17 @@ GAME.Entity.EteEnemy = function(sprite){
 						sprite.spriteSheet.play('right');
 					} else {
 						sprite.spriteSheet.play('left');
-					}
+					};
 				} else {
 					if(sprite.spriteSheet.current != 'idleLeft' && sprite.spriteSheet.current != 'idleRight'){
 						if(sprite.cache.position.x > sprite.position.x || sprite.spriteSheet.current.toLowerCase().indexOf('right') == -1){
 							sprite.spriteSheet.play('idleLeft');
 						}else{
 							sprite.spriteSheet.play('idleRight');
-						}
-					}
-				}
-			}
-		}
-	}
-}
+						};
+					};
+				};
+			};
+		};
+	};
+};

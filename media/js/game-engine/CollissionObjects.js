@@ -4,13 +4,13 @@ var Collision = function(self, other){
         sprite: self,
         point: self.position.clone(),
         hit: self._hit
-    }
+    };
     this.other = {
         sprite: other,
         point: other.position.clone(),
         hit: other._hit
-    }
-}
+    };
+};
 
 var CollisionData = function(data){
 	this.data = data || [];
@@ -23,41 +23,41 @@ var CollisionData = function(data){
 			}else{
 				collision.self.sprite.trigger('hittest.out', this.data[i], true);
 				collision.other.sprite.trigger('hittest.out', collision.other.sprite.collisions.getCollision(collision.self.sprite), true);
-			}
-		}
+			};
+		};
 		this.data = _return;
-	}
+	};
 
 	this.hasCollision = function(sprite){
 		for(var i = 0; i < this.data.length; i++){
 			if(this.data[i].other.sprite == sprite){
 				return true;
-			}
-		}
+			};
+		};
 		return false;
-	}
+	};
 
 	this.addCollision = function(collision){
 		if(!this.hasCollision(collision.other.sprite)){
 			this.data.push(collision);
 			collision.self.sprite.trigger('hittest.in', collision, true);
 			collision.other.sprite.trigger('hittest.in', new Collision(collision.other.sprite, collision.self.sprite), true);
-		}
-	}
+		};
+	};
 
 	this.getCollision = function(sprite){
 		for(var i = 0; i < this.data.length; i++){
 			if(this.data[i].other.sprite == sprite){
 				return this.data[i];
-			}
-		}
+			};
+		};
 		return false;
-	}
+	};
 
     this.cleanCollisions = function(){
         this.data = [];
-    }
-}
+    };
+};
 
 /**
  * A circle.
@@ -103,7 +103,7 @@ Polygon.prototype.recalc = function () {
         var n = new Vector2().copy(e).perp().normalize();
         this.edges.push(e);
         this.normals.push(n);
-    }
+    };
 };
 
 /**
@@ -139,7 +139,7 @@ Box.prototype.toPolygon = function () {
 		new Vector2(w, h), new Vector2(0, h)
 	]);
 
-	if(Shape) { this.parent.addChild(s); }
+	if(Shape) { this.parent.addChild(s); };
 
 	return s;
 };
@@ -167,34 +167,34 @@ var Triangle = function(){
     		case Shape.triangleType.BOTTOM_RIGHT:
     			this.points = [new Vector2(0, 0), new Vector2(this.w, 0), new Vector2(0, this.h)];
     		break;
-    	}
+    	};
     });
-}
+};
 
 Triangle.prototype.toPolygon = function(){
     var s = new Shape.polygon(new Vector2(), this.points);
-    if(Shape) { this.parent.addChild(s); }
+    if(Shape) { this.parent.addChild(s); };
     return s;
-}
+};
 
 /**
  * Pool of Vector2s used in calculations.
  *
- * @type {Array.<Vector2>}
+ * @type {Array.<Vector2>};
  */
 var T_VECTORS2 = [];
 for (var i = 0; i < 10; i++) {
     T_VECTORS2.push(new Vector2());
-}
+};
 /**
  * Pool of Arrays used in calculations.
  *
- * @type {Array.<Array.<*>>}
+ * @type {Array.<Array.<*>>};
  */
 var T_ARRAYS = [];
 for (var i = 0; i < 5; i++) {
     T_ARRAYS.push([]);
-}
+};
 
 /**
  * An object representing the result of an intersection. Contain information about:
@@ -244,9 +244,9 @@ var flattenPointsOn = function (points, normal, result) {
     for (var i = 0; i < len; i++ ) {
         // Get the magnitude of the projection of the point onto the normal
         var dot = points[i].dot(normal);
-        if (dot < min) { min = dot; }
-        if (dot > max) { max = dot; }
-    }
+        if (dot < min) { min = dot; };
+        if (dot > max) { max = dot; };
+    };
     result[0] = min; result[1] = max;
 };
 
@@ -284,7 +284,7 @@ var isSeparatingAxis = function (aPos, bPos, aPoints, bPoints, axis, response) {
         T_ARRAYS.push(rangeA);
         T_ARRAYS.push(rangeB);
         return true;
-    }
+    };
     // If we're calculating a response, calculate the overlap.
     if (response) {
         var overlap = 0;
@@ -300,7 +300,7 @@ var isSeparatingAxis = function (aPos, bPos, aPoints, bPoints, axis, response) {
                 var option1 = rangeA[1] - rangeB[0];
                 var option2 = rangeB[1] - rangeA[0];
                 overlap = option1 < option2 ? option1 : -option2;
-            }
+            };
             // B starts further left than A
         } else {
             response.bInA = false;
@@ -313,8 +313,8 @@ var isSeparatingAxis = function (aPos, bPos, aPoints, bPoints, axis, response) {
                 var option1 = rangeA[1] - rangeB[0];
                 var option2 = rangeB[1] - rangeA[0];
                 overlap = option1 < option2 ? option1 : -option2;
-            }
-        }
+            };
+        };
         // If this is the smallest amount of overlap we've seen so far, set it as the minimum overlap.
         var absOverlap = Math.abs(overlap);
         if (absOverlap < response.overlap) {
@@ -322,9 +322,9 @@ var isSeparatingAxis = function (aPos, bPos, aPoints, bPoints, axis, response) {
             response.overlapN.copy(axis);
             if (overlap < 0) {
                 response.overlapN.reverse();
-            }
-        }
-    }
+            };
+        };
+    };
     T_VECTORS2.push(offsetV);
     T_ARRAYS.push(rangeA);
     T_ARRAYS.push(rangeB);
@@ -354,7 +354,7 @@ var vornoiRegion = function (line, point) {
         return RIGHT_VORNOI_REGION;
     } else {
         return MIDDLE_VORNOI_REGION;
-    }
+    };
 };
 /**
  * @const
@@ -387,7 +387,7 @@ var testCircleCircle = function (a, b, response) {
         // They do not intersect
         T_VECTORS2.push(differenceV);
         return false;
-    }
+    };
     // They intersect.  If we're calculating a response, calculate the overlap.
     if (response) {
         var dist = Math.sqrt(distanceSq);
@@ -398,7 +398,7 @@ var testCircleCircle = function (a, b, response) {
         response.overlapV.copy(differenceV).scale(response.overlap);
         response.aInB = a.r <= b.r && dist <= b.r - a.r;
         response.bInA = b.r <= a.r && dist <= a.r - b.r;
-    }
+    };
     T_VECTORS2.push(differenceV);
     return true;
 };
@@ -438,7 +438,7 @@ var testPolygonCircle = function (polygon, circle, response) {
         // the circle.
         if (response && point.len2() > radius2) {
             response.aInB = false;
-        }
+        };
 
         // Calculate which Vornoi region the center of the circle is in.
         var region = vornoiRegion(edge, point);
@@ -463,8 +463,8 @@ var testPolygonCircle = function (polygon, circle, response) {
                     response.bInA = false;
                     overlapN = point.normalize();
                     overlap = radius - dist;
-                }
-            }
+                };
+            };
             T_VECTORS2.push(point2);
         } else if (region === RIGHT_VORNOI_REGION) {
             // Need to make sure we're in the left region on the next edge
@@ -486,8 +486,8 @@ var testPolygonCircle = function (polygon, circle, response) {
                     response.bInA = false;
                     overlapN = point.normalize();
                     overlap = radius - dist;
-                }
-            }
+                };
+            };
             // MIDDLE_VORNOI_REGION
         } else {
             // Need to check if the circle is intersecting the edge,
@@ -511,24 +511,24 @@ var testPolygonCircle = function (polygon, circle, response) {
                 // circle is on the outside, the circle is not fully inside the polygon.
                 if (dist >= 0 || overlap < 2 * radius) {
                     response.bInA = false;
-                }
-            }
-        }
+                };
+            };
+        };
 
         // If this is the smallest overlap we've seen, keep it.
         // (overlapN may be null if the circle was in the wrong Vornoi region)
         if (overlapN && response && Math.abs(overlap) < Math.abs(response.overlap)) {
             response.overlap = overlap;
             response.overlapN.copy(overlapN);
-        }
-    }
+        };
+    };
 
     // Calculate the final overlap Vector2 - based on the smallest overlap.
     if (response) {
         response.a = polygon;
         response.b = circle;
         response.overlapV.copy(response.overlapN).scale(response.overlap);
-    }
+    };
     T_VECTORS2.push(circlePos);
     T_VECTORS2.push(edge);
     T_VECTORS2.push(point);
@@ -559,7 +559,7 @@ var testCirclePolygon = function (circle, polygon, response) {
         response.b = a;
         response.aInB = response.bInA;
         response.bInA = aInB;
-    }
+    };
     return result;
 };
 
@@ -582,14 +582,14 @@ var testPolygonPolygon = function (a, b, response) {
     for (var i = 0; i < aLen; i++) {
         if (isSeparatingAxis(a.pos, b.pos, aPoints, bPoints, a.normals[i], response)) {
             return false;
-        }
-    }
+        };
+    };
     // If any of the edge normals of B is a separating axis, no intersection.
     for (var i = 0; i < bLen; i++) {
         if (isSeparatingAxis(a.pos, b.pos, aPoints, bPoints, b.normals[i], response)) {
             return false;
-        }
-    }
+        };
+    };
     // Since none of the edge normals of A or B are a separating axis, there is an intersection
     // and we've already calculated the smallest overlap (in isSeparatingAxis).  Calculate the
     // final overlap Vector2.
@@ -597,7 +597,7 @@ var testPolygonPolygon = function (a, b, response) {
         response.a = a;
         response.b = b;
         response.overlapV.copy(response.overlapN).scale(response.overlap);
-    }
+    };
     return true;
 };
 
@@ -617,10 +617,10 @@ var elasticCollision = function(collision){
 	if(collision.self.hit.left || collision.self.hit.right){
 		self.velocity.x = selfVelocity.x;
 		other.velocity.x = otherVelocity.x;
-	}
+	};
 
 	if(collision.self.hit.top || collision.self.hit.bottom){
 		self.velocity.y = selfVelocity.y;
 		other.velocity.y = otherVelocity.y;
-	}
-}
+	};
+};

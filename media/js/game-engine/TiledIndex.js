@@ -23,9 +23,9 @@ var TiledIndex = (function(){
 				n = i + 1;
 				n = (n < 100 ? n < 10 ? '00' + n : '0' + n : n);
 				$(GAME.Stage.el).append('<div style="outline: 1px solid rgba(0, 0, 0, .5); width:'+this.width+'px; height:'+this.height+'px; position: absolute; top:'+(~~(i/this.limitX) * this.height)+'px; left:'+(i%this.limitX * this.width)+'px; font-weight: bold; text-indent: 3px; text-shadow: 1px 1px 0 #fff;">'+n+'</div>')
-			}
-		}
-	}
+			};
+		};
+	};
 
 	/*
 	* Add a Sprite in a list of index
@@ -53,25 +53,25 @@ var TiledIndex = (function(){
 
 				if(this.indexes[_index] == undefined) this.indexes[_index] = [];
 				this.indexes[_index].push(sprite);
-			}
-		}
+			};
+		};
 
 		if(GAME.Settings.DEBUG_COLLISION_INDEX){
 			if($(sprite.el).find('> .debug-tile').length == 0){
 				$(sprite.el).append('<div class="debug-tile" style="position: absolute; top:0; left: 0; padding: 5px; background: rgba(255, 255, 255, .7); z-index: 1;">' + 'TileX: '+tileX+'<br />TileY: '+tileY+'<br />Tile index: '+sprite.tiles.toString()+'</div>');
 			}else{
 				$(sprite.el).find('> .debug-tile').html('TileX: '+tileX+'<br />TileY: '+tileY+'<br />Tile index: '+sprite.tiles.toString());
-			}
-		}
-	}
+			};
+		};
+	};
 
 	TiledIndex.prototype.removeSprite = function(sprite){
 		for(var i = 0; i < sprite.tiles.length; i++){
 			this.indexes[sprite.tiles[i]] = Arr.remove(this.indexes[sprite.tiles[i]], sprite);
-		}
+		};
 
 		sprite.tiles = [];
-	}
+	};
 
 	/*
 	* Get iniq sprites in a list of index
@@ -85,12 +85,12 @@ var TiledIndex = (function(){
 			for(var j = 0; j < s.length; j++){
 				if(a.indexOf(s) == -1 && s[j].getLastParent() != sprite.getLastParent()){
 					a.push(s[j]);
-				}
-			}
-		}
+				};
+			};
+		};
 
 		return a;
-	}
+	};
 
 	/*
 	* Verify if exists other sprites in the tiles index
@@ -102,11 +102,11 @@ var TiledIndex = (function(){
 		for(var i = 0; i < t.length; i++){
 			if(this.indexes[t[i]].length > 1){
 				r = true;
-			}
-		}
+			};
+		};
 
 		return r;
-	}
+	};
 
 	return TiledIndex;
 })();

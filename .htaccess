@@ -2,11 +2,10 @@
 RewriteEngine On
 
 # Set application mode: production, development, testing, staging
-SetEnv KOHANA_ENV development
+SetEnv KOHANA_ENV production
 
 # Installation directory
-RewriteBase /
-SetEnv BASE_URL /
+SetEnv BASE_URL /rvaz/labs/RenanVaz/
 
 # Protect hidden files from being viewed
 <Files .*>
